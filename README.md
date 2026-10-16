@@ -2,7 +2,7 @@
 
 A PhotoCraft plugin based on [dnanhkhoa/rust-background-removal](https://github.com/dnanhkhoa/rust-background-removal), using IMG.LY's IS-Net models. Open **Plugins → Background Removal** for the controls and comparison preview. A bundled worker performs local CPU inference; PhotoCraft manages its lifetime and cancellation.
 
-[Source repository](https://github.com/brandongunderson/photocraft-background-removal-plugin)
+[Source repository](https://github.com/brandongunderson/photocraft-background-removal-plugin) · [Changelog](CHANGELOG.md)
 
 [Download the latest plugin](https://github.com/brandongunderson/photocraft-background-removal-plugin/releases/latest/download/PhotoCraft-Background-Removal.pcplugin) · [All releases](https://github.com/brandongunderson/photocraft-background-removal-plugin/releases)
 
@@ -10,7 +10,7 @@ A PhotoCraft plugin based on [dnanhkhoa/rust-background-removal](https://github.
 
 1. Run a PhotoCraft build supporting panel API 2, package format 2 and `host.commands.invoke` version 1, with the general `plugin.processImage` API.
 2. Choose **Plugins → Manage Plugins → Browse** and select `PhotoCraft-Background-Removal.pcplugin`.
-3. Review the native-code permission and select **Install**. For an update, enable **Replace existing plugin**.
+3. Review the native-code permission and select **Install plugin** or **Update plugin**. The current manager chooses the action from the installed and selected versions.
 4. Open an image and choose **Plugins → Background Removal**.
 5. Choose a model and result, then **Create result**. Compare the preview with the divider, then **Apply** or **Discard**. Apply can open a new unsaved tab or add a layer at the original dimensions. The source stays unchanged until Apply; adding a layer is undoable.
 
