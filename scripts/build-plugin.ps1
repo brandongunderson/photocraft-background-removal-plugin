@@ -90,7 +90,7 @@ try {
     } finally { $pluginZip.Dispose() }
     Move-Item -LiteralPath $pluginTemporary -Destination $pluginArchive -Force
     Write-Output "Installable plugin: $pluginArchive"
-    Write-Output 'In PhotoCraft: Plugins > Manage Plugins > Browse, then select this .pcplugin file. Older compatible builds use Choose plugin.'
+    Write-Output 'In PhotoCraft: Plugins > Manage Plugins > Browse, then select this .pcplugin file.'
 } finally {
     Pop-Location
     # Only remove this invocation's staging directory after checking its resolved absolute boundary.

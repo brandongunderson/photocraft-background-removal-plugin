@@ -1,12 +1,14 @@
 {
   "formatVersion": 1,
   "descriptor": {
-    "apiVersion": 2,
+    "apiVersion": 1,
     "id": "org.photocraft.background-removal",
     "name": "Background Removal",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "author": "Brandon Gunderson",
     "description": "Remove the background with local IMG.LY AI. Keep the subject, isolate the background, or create a mask. Preview at the original size, then apply to a new image or layer.",
+    "repository": "https://github.com/brandongunderson/photocraft-background-removal-plugin",
+    "updates": {"provider": "github", "asset": "PhotoCraft-Background-Removal.pcplugin"},
     "permissions": {
       "documentRead": true,
       "commands": [

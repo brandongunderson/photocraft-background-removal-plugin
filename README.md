@@ -8,13 +8,17 @@ A PhotoCraft plugin based on [dnanhkhoa/rust-background-removal](https://github.
 
 ## Install and use
 
-1. Run a PhotoCraft build supporting panel API 2, package format 2 and `host.commands.invoke` version 1, with the general `plugin.processImage` API.
+1. Run the current Windows x64 PhotoCraft build with plugin support.
 2. Choose **Plugins → Manage Plugins → Browse** and select `PhotoCraft-Background-Removal.pcplugin`.
 3. Review the native-code permission and select **Install plugin** or **Update plugin**. The current manager chooses the action from the installed and selected versions.
 4. Open an image and choose **Plugins → Background Removal**.
 5. Choose a model and result, then **Create result**. Compare the preview with the divider, then **Apply** or **Discard**. Apply can open a new unsaved tab or add a layer at the original dimensions. The source stays unchanged until Apply; adding a layer is undoable.
 
 Requirements: Windows x64, Windows 10 build 19041 or later or Windows 11. This package includes its models, ONNX Runtime, and the Microsoft VC runtime DLLs imported by ONNX; no separate VC runtime installation is required. Windows itself supplies its normal system libraries and Universal CRT. It makes no model downloads during use. CPU inference does not need a discrete GPU. Native inference can use substantial RAM and take several seconds or longer; available memory and image size affect performance.
+
+## Updating
+
+In **Plugins → Manage Plugins**, select **Check for updates** to check this plugin’s [own GitHub releases](https://github.com/brandongunderson/photocraft-background-removal-plugin/releases). When an update is available, select **Update…**, review the permissions, then choose **Update plugin**. Checking and installation are explicit actions; updates are never installed automatically and the installed plugin continues to work offline.
 
 ## Controls
 
@@ -37,7 +41,7 @@ The plugin processes the visible flattened composite. PhotoCraft converts suppor
 ## Source layout
 
 ```text
-authoring.json               Panel API 2 descriptor and package format 2 metadata
+authoring.json               Plugin API descriptor and package format 2 metadata
 extension/                   Typed Rust WASM panel and private SDK
 src/worker.rs                One-job native executable, progress and cancellation
 src/engine.rs                Input color conversion, IS-Net inference and mask composition
@@ -55,7 +59,7 @@ vendor/rust-background-removal/  Unmodified upstream reference source and proven
 licenses/                    Bundled Rust dependency license texts
 ```
 
-This project has its own Cargo workspace and does not depend on PhotoCraft editor source or the former upscale companion. Model ids, options, inference, dimension restrictions, dependency assets, and required asset checks belong to this plugin. PhotoCraft supplies only the general installer, permission gate, image transport, progress/cancellation, and preview/apply transaction. Updating models or settings requires rebuilding this plugin, without changing the editor. The upstream CLI's preprocessing informed `src/engine.rs`; its CLI and HTTP server are not compiled or packaged.
+This project has its own Cargo workspace and builds independently of PhotoCraft editor source and other plugins. Model ids, options, inference, dimension restrictions, dependency assets, and required asset checks belong to this plugin. PhotoCraft supplies the general installer, permission gate, image transport, progress/cancellation, and preview/apply transaction. Updating models or settings requires rebuilding this plugin, without changing the editor. The upstream CLI's preprocessing informed `src/engine.rs`; its CLI and HTTP server are not compiled or packaged.
 
 ## Build
 
@@ -72,7 +76,7 @@ cargo test --locked --manifest-path extension/Cargo.toml
 
 The output is `dist/PhotoCraft-Background-Removal.pcplugin`. Add `-Offline` when all Rust dependencies and assets are cached. `-DebugWorker` builds a debug native worker for development. The script validates every listed runtime asset's SHA256, builds native and WASM binaries, checks the worker is Windows x64, and creates a ZIP with files directly at its root. Install the complete package, not the `.pcext` alone.
 
-Version 1.2.0 uses `packageVersion: 2`, the general service `plugin.processImage`, entry `photocraft-background-worker.exe`, and a `plugin.pcext` module. The panel grants only `plugin.processImage` and document summary access. The host binds processing to this package's worker; the panel cannot select another plugin or executable. Older hosts that only support the former typed AI services cannot install this release. Update the editor first and replace the installed package; the stable plugin id is unchanged and the new generic processing permission must be approved.
+Version 1.2.1 packages the `plugin.pcext` panel with `photocraft-background-worker.exe` through the `plugin.processImage` service. The panel requests only image processing and document summary access. The host binds processing to this package's worker; the panel cannot select another plugin or executable.
 
 ## Repository contents
 
@@ -110,24 +114,24 @@ Microsoft VC runtime 14.44.35211.0 is extracted as data from the official pinned
 ## Limits and troubleshooting
 
 - **Cannot load bundled AI engine:** verify the supported Windows version and reinstall the complete plugin to restore its bundled ONNX and VC DLLs.
-- **Unsupported package or command:** run a PhotoCraft build with package version 2 and `plugin.processImage`, install the full `.pcplugin`, then open the installed panel.
+- **Unsupported package or command:** update PhotoCraft to a build meeting the compatibility requirements below, install the full `.pcplugin`, then open the installed panel.
 - **Slow or memory-heavy processing:** close other large documents/applications or use a smaller input. Smaller model storage does not guarantee faster CPU execution.
 - **Inaccurate edges:** compare models and refine the resulting transparency or mask manually. This segmentation model is not a guarantee of pixel-perfect hair or glass extraction.
 - **Update/remove blocked during processing:** cancel or wait for completion before replacing/removing the package.
 
 The native worker runs with your OS account's permissions. The WASM panel is sandboxed; the worker is not covered by that sandbox. Install packages from publishers you trust.
 
-## API 2 compatibility (1.2.0)
+## PhotoCraft Plugin API compatibility
 
-This release requires a PhotoCraft host supporting **panel API 2**, package format 2 and
-the `host.commands.invoke` capability at version 1. API 1 panels are no longer supported.
-The stable plugin id, model choices, processing algorithms and worker protocols are preserved.
-The native image/task protocol remains version 1; it is separate from the panel API.
+This plugin uses the **PhotoCraft Plugin API** through the privately bundled SDK 0.1.
+The host must support package format 2, `host.commands.invoke` capability version 1,
+the `plugin.processImage` command, and comparison previews. The worker uses native image
+protocol 1. Package and native worker contracts are versioned independently of the Plugin API.
 
 Edit `authoring.json` for both the panel descriptor and archive metadata. The panel's
 build script validates it with the private SDK and generates the embedded descriptor and
 bindings into Cargo output. The package builder derives its root `package.json` from the
 same source. `extension/vendor/` contains this project's SDK/API sources and their
 `SDK-RELEASE.json` hashes. Builds require no PhotoCraft source checkout or sibling plugin.
-The SDK handles bounded ABI buffers and API 2 event validation, including additive host
+The SDK handles bounded ABI buffers and Plugin API event validation, including additive host
 metadata. Failed/unknown/observer events propose no processing and preserve panel state.
