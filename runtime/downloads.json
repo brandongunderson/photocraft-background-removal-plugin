@@ -1,0 +1,73 @@
+{
+  "checkedAt": "2026-10-15",
+  "imglyModelRevision": "440dea96dd4a3b06bbbf5abec3e26569dd7ec49f",
+  "imglyJsRevision": "12f56cc4f2a90d624e165a715748d22efc7a1d93",
+  "onnxRuntimeVersion": "1.22.0",
+  "onnxRuntimeArchiveSha256": "174c616efc0271194488642a72f1a514e01487da4dfe84c49296d66e40ebe0da",
+  "files": [
+    {
+      "path": "models/isnet.onnx",
+      "url": "https://huggingface.co/imgly/isnet-general-onnx/resolve/440dea96dd4a3b06bbbf5abec3e26569dd7ec49f/onnx/model.onnx?download=true",
+      "sha256": "cc2c9f5c1751b9737cb81e708ff0c5e9542c2205daed22418a4fd2ab5d4c481a",
+      "size": 176149806
+    },
+    {
+      "path": "models/isnet_fp16.onnx",
+      "url": "https://huggingface.co/imgly/isnet-general-onnx/resolve/440dea96dd4a3b06bbbf5abec3e26569dd7ec49f/onnx/model_fp16.onnx?download=true",
+      "sha256": "2eb4b5dda7ec41c617e59706e5aafa1f978c9a5f983d2518d9f0ae4d6eb04f20",
+      "size": 88152708
+    },
+    {
+      "path": "models/isnet_quint8.onnx",
+      "url": "https://media.githubusercontent.com/media/imgly/background-removal-js/12f56cc4f2a90d624e165a715748d22efc7a1d93/bundle/models/isnet_quint8",
+      "sha256": "d1ca3535c21b53d08fa3b640e5949389f82e764f6376a0502d44982c35cae482",
+      "size": 44348940
+    },
+    {
+      "path": "bin/onnxruntime.dll",
+      "url": "https://github.com/microsoft/onnxruntime/releases/download/v1.22.0/onnxruntime-win-x64-1.22.0.zip",
+      "archivePath": "onnxruntime-win-x64-1.22.0/lib/onnxruntime.dll",
+      "sha256": "579b636403983254346a5c1d80bd28f1519cd1e284cd204f8d4ff41f8d711559",
+      "size": 12418080
+    },
+    {
+      "path": "bin/onnxruntime_providers_shared.dll",
+      "url": "https://github.com/microsoft/onnxruntime/releases/download/v1.22.0/onnxruntime-win-x64-1.22.0.zip",
+      "archivePath": "onnxruntime-win-x64-1.22.0/lib/onnxruntime_providers_shared.dll",
+      "sha256": "ba00ea1ef846c9b909c7854bc56c51051a20f9773b3e1153dda118d4b85d0b93",
+      "size": 22064
+    },
+    {
+      "path": "licenses/onnxruntime-LICENSE",
+      "url": "https://github.com/microsoft/onnxruntime/releases/download/v1.22.0/onnxruntime-win-x64-1.22.0.zip",
+      "sha256": "c250d6278f0b47a6439fb7592b08b58a55eb9f535aa49a1db63211c3f982b674",
+      "size": 1094,
+      "archivePath": "onnxruntime-win-x64-1.22.0/LICENSE"
+    },
+    {
+      "path": "licenses/onnxruntime-ThirdPartyNotices.txt",
+      "url": "https://github.com/microsoft/onnxruntime/releases/download/v1.22.0/onnxruntime-win-x64-1.22.0.zip",
+      "sha256": "e00f828e0a33de591a355ae6606d2625f5758da7d2c844db7821c9dd3e3647b6",
+      "size": 333022,
+      "archivePath": "onnxruntime-win-x64-1.22.0/ThirdPartyNotices.txt"
+    },
+    {
+      "path": "licenses/IMG-LY-MODEL-CARD.md",
+      "url": "https://huggingface.co/imgly/isnet-general-onnx/raw/440dea96dd4a3b06bbbf5abec3e26569dd7ec49f/README.md",
+      "sha256": "d8d7a46d41a1a37fe4f0a5f637bf55c649310185329127d8a2204632e480be17",
+      "size": 24
+    },
+    {
+      "path": "licenses/IMG-LY-ThirdPartyLicenses.json",
+      "url": "https://raw.githubusercontent.com/imgly/background-removal-js/12f56cc4f2a90d624e165a715748d22efc7a1d93/packages/web/ThirdPartyLicenses.json",
+      "sha256": "eba4ac100517b843319664012fb7255c182862b99672aa0b7161ae421e804ade",
+      "size": 569
+    },
+    {
+      "path": "licenses/DIS-LICENSE.md",
+      "url": "https://raw.githubusercontent.com/xuebinqin/DIS/main/LICENSE.md",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "size": 11357
+    }
+  ]
+}

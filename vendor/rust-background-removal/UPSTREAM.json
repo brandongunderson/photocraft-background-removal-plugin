@@ -1,0 +1,5 @@
+{
+  "repository": "https://github.com/dnanhkhoa/rust-background-removal",
+  "revision": "9488f5b0a0a0d800c57f1af83a780dabbfb3780a",
+  "role": "Original MIT processing implementation adapted into the native plugin; upstream CLI/server is not shipped."
+}

@@ -1,0 +1,19 @@
+/target/
+/dist/
+/extension/target/
+/runtime/models/*.onnx
+/runtime/bin/*.dll
+/runtime/bin/*.exe
+/runtime/**/*.part
+/verification/*.png
+/verification/*.jpg
+/verification/*.log
+# Machine-specific validation reports remain local; keep the release summaries in Git.
+/verification/*.json
+/verification/*-job.json
+*.pcplugin
+/*.dll
+/verification/vc_redist.x64.exe
+/verification/vc-extract/
+__pycache__/
+*.pyc

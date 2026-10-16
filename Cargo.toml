@@ -1,0 +1,26 @@
+[package]
+name = "photocraft-background-removal-plugin"
+version = "1.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+description = "Installable local Background Removal plugin for PhotoCraft"
+
+[workspace]
+
+[dependencies]
+ort = { version = "=2.0.0-rc.10", default-features = false, features = ["std", "load-dynamic"] }
+image = { version = "0.25", default-features = false, features = ["png"] }
+moxcms = "0.8.1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tempfile = "3"
+
+[[bin]]
+name = "photocraft-background-worker"
+path = "src/worker.rs"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+strip = true
