@@ -4,10 +4,12 @@ A PhotoCraft plugin based on [dnanhkhoa/rust-background-removal](https://github.
 
 [Source repository](https://github.com/brandongunderson/photocraft-background-removal-plugin)
 
+[Download the latest plugin](https://github.com/brandongunderson/photocraft-background-removal-plugin/releases/latest/download/PhotoCraft-Background-Removal.pcplugin) · [All releases](https://github.com/brandongunderson/photocraft-background-removal-plugin/releases)
+
 ## Install and use
 
-1. Run a PhotoCraft build that supports package version 2 and the general `plugin.processImage` API.
-2. Choose **Plugins → Manage Plugins → Browse** and select `PhotoCraft-Background-Removal.pcplugin`. Older compatible builds label this button **Choose plugin**.
+1. Run a PhotoCraft build supporting panel API 2, package format 2 and `host.commands.invoke` version 1, with the general `plugin.processImage` API.
+2. Choose **Plugins → Manage Plugins → Browse** and select `PhotoCraft-Background-Removal.pcplugin`.
 3. Review the native-code permission and select **Install**. For an update, enable **Replace existing plugin**.
 4. Open an image and choose **Plugins → Background Removal**.
 5. Choose a model and result, then **Create result**. Compare the preview with the divider, then **Apply** or **Discard**. Apply can open a new unsaved tab or add a layer at the original dimensions. The source stays unchanged until Apply; adding a layer is undoable.
@@ -35,7 +37,8 @@ The plugin processes the visible flattened composite. PhotoCraft converts suppor
 ## Source layout
 
 ```text
-extension/                   Independent Rust WASM panel and manifest
+authoring.json               Panel API 2 descriptor and package format 2 metadata
+extension/                   Typed Rust WASM panel and private SDK
 src/worker.rs                One-job native executable, progress and cancellation
 src/engine.rs                Input color conversion, IS-Net inference and mask composition
 src/protocol.rs              Strict bounded JSON protocol
@@ -56,7 +59,7 @@ This project has its own Cargo workspace and does not depend on PhotoCraft edito
 
 ## Build
 
-Install Rust 1.95 or later with the `wasm32-unknown-unknown` target and a working Windows x64 linker. Downloaded inference binaries and model files are excluded from Git. Restore the exact runtime assets with `scripts/fetch-assets.ps1`, which uses the URLs and SHA256 hashes in `runtime/downloads.json`. Run from this project:
+Install Rust 1.95 or later with the `wasm32-unknown-unknown` target and a working Windows x64 linker, plus Python 3.11 or later for collecting dependency licenses. Downloaded inference binaries and model files are excluded from Git. Restore the exact runtime assets with `scripts/fetch-assets.ps1`, which uses the URLs and SHA256 hashes in `runtime/downloads.json`. Run from this project:
 
 ```powershell
 rustup target add wasm32-unknown-unknown
@@ -64,12 +67,12 @@ rustup target add wasm32-unknown-unknown
 cargo test --locked
 cargo clippy --locked --all-targets -- -D warnings
 cargo test --locked --manifest-path extension/Cargo.toml
-./scripts/build-plugin.ps1
+./scripts/build-plugin.ps1 -Python python
 ```
 
 The output is `dist/PhotoCraft-Background-Removal.pcplugin`. Add `-Offline` when all Rust dependencies and assets are cached. `-DebugWorker` builds a debug native worker for development. The script validates every listed runtime asset's SHA256, builds native and WASM binaries, checks the worker is Windows x64, and creates a ZIP with files directly at its root. Install the complete package, not the `.pcext` alone.
 
-Version 1.1.0 uses `packageVersion: 2`, the general service `plugin.processImage`, entry `photocraft-background-worker.exe`, and a `plugin.pcext` module. The panel grants only `plugin.processImage` and document summary access. The host binds processing to this package's worker; the panel cannot select another plugin or executable. Older hosts that only support the former typed AI services cannot install this release. Update the editor first and replace the installed package; the stable plugin id is unchanged and the new generic processing permission must be approved.
+Version 1.2.0 uses `packageVersion: 2`, the general service `plugin.processImage`, entry `photocraft-background-worker.exe`, and a `plugin.pcext` module. The panel grants only `plugin.processImage` and document summary access. The host binds processing to this package's worker; the panel cannot select another plugin or executable. Older hosts that only support the former typed AI services cannot install this release. Update the editor first and replace the installed package; the stable plugin id is unchanged and the new generic processing permission must be approved.
 
 ## Repository contents
 
@@ -113,3 +116,18 @@ Microsoft VC runtime 14.44.35211.0 is extracted as data from the official pinned
 - **Update/remove blocked during processing:** cancel or wait for completion before replacing/removing the package.
 
 The native worker runs with your OS account's permissions. The WASM panel is sandboxed; the worker is not covered by that sandbox. Install packages from publishers you trust.
+
+## API 2 compatibility (1.2.0)
+
+This release requires a PhotoCraft host supporting **panel API 2**, package format 2 and
+the `host.commands.invoke` capability at version 1. API 1 panels are no longer supported.
+The stable plugin id, model choices, processing algorithms and worker protocols are preserved.
+The native image/task protocol remains version 1; it is separate from the panel API.
+
+Edit `authoring.json` for both the panel descriptor and archive metadata. The panel's
+build script validates it with the private SDK and generates the embedded descriptor and
+bindings into Cargo output. The package builder derives its root `package.json` from the
+same source. `extension/vendor/` contains this project's SDK/API sources and their
+`SDK-RELEASE.json` hashes. Builds require no PhotoCraft source checkout or sibling plugin.
+The SDK handles bounded ABI buffers and API 2 event validation, including additive host
+metadata. Failed/unknown/observer events propose no processing and preserve panel state.

@@ -21,3 +21,5 @@ ONNX Runtime requires Windows system components and Microsoft VC runtime librari
 The executable uses `ort` 2.0.0-rc.10 (MIT/Apache-2.0), `image` (MIT/Apache-2.0), `moxcms` (BSD-3-Clause or Apache-2.0), `serde`, `serde_json`, `tempfile`, and their transitive dependencies. Exact versions are recorded in the two Cargo.lock files. Full locally published dependency license texts are collected in `licenses/rust-dependencies.txt`. No dependency on PhotoCraft source or the former upscale companion is included.
 
 Binary and model source URLs, exact revisions, sizes, and SHA256 digests are recorded in `runtime/downloads.json` and `runtime/vc-runtime.json`.
+
+- **PhotoCraft Plugin API and SDK 0.1**, MIT OR Apache-2.0. Privately vendored in `extension/vendor/`, with source hashes in `SDK-RELEASE.json`. Both license texts are retained in source and packaged under `licenses/photocraft-sdk/`. Rust dependency versions remain pinned by `extension/Cargo.lock`.

@@ -1,3 +1,5 @@
+> Current panel API 2 migration and package identity: [API2-MIGRATION.md](API2-MIGRATION.md). The results below identify their earlier validation artifact.
+
 # Background Removal 1.0.0 verification (2026-10-15)
 
 This report covers the independent plugin and its extracted release package. PhotoCraft host integration, menu/panel snapshots, installed-store restart behavior, and application regression tests are recorded by the host project separately. This is a tested first implementation, not a claim of exhaustive compatibility or pixel-perfect segmentation.

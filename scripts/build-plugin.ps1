@@ -1,4 +1,4 @@
-param([switch]$DebugWorker, [switch]$Offline)
+param([switch]$DebugWorker, [switch]$Offline, [string]$Python = 'python')
 $ErrorActionPreference = 'Stop'
 $pluginRoot = [System.IO.Path]::GetFullPath((Split-Path $PSScriptRoot))
 $pluginDist = Join-Path $pluginRoot 'dist'
@@ -47,8 +47,18 @@ try {
         [BitConverter]::ToUInt16($pluginWorkerBytes, $pluginPeOffset + 4) -ne 34404) {
         throw 'The built processing engine must target Windows x86_64.'
     }
+    & $Python (Join-Path $PSScriptRoot 'collect-licenses.py')
+    if ($LASTEXITCODE -ne 0) { throw 'Dependency license collection failed.' }
     New-Item -ItemType Directory -Path $pluginStage -Force | Out-Null
-    foreach ($pluginName in @('package.json', 'LICENSE', 'THIRD-PARTY-NOTICES.md', 'README.md')) {
+    # The same authoring source generates the embedded panel descriptor and archive metadata.
+    $pluginAuthoring = Get-Content -LiteralPath (Join-Path $pluginRoot 'authoring.json') -Raw | ConvertFrom-Json
+    $pluginPackage = $pluginAuthoring.package | ConvertTo-Json -Depth 32
+    [IO.File]::WriteAllText((Join-Path $pluginStage 'package.json'), $pluginPackage, [Text.UTF8Encoding]::new($false))
+    New-Item -ItemType Directory -Path (Join-Path $pluginStage 'licenses/photocraft-sdk') -Force | Out-Null
+    Copy-Item -LiteralPath (Join-Path $pluginRoot 'extension/vendor/plugin-sdk/LICENSE-MIT') -Destination (Join-Path $pluginStage 'licenses/photocraft-sdk/LICENSE-MIT')
+    Copy-Item -LiteralPath (Join-Path $pluginRoot 'extension/vendor/plugin-sdk/LICENSE-APACHE') -Destination (Join-Path $pluginStage 'licenses/photocraft-sdk/LICENSE-APACHE')
+    Copy-Item -LiteralPath (Join-Path $pluginRoot 'extension/vendor/SDK-RELEASE.json') -Destination (Join-Path $pluginStage 'licenses/photocraft-sdk/SDK-RELEASE.json')
+    foreach ($pluginName in @('LICENSE', 'THIRD-PARTY-NOTICES.md', 'README.md')) {
         Copy-Item -LiteralPath (Join-Path $pluginRoot $pluginName) -Destination $pluginStage
     }
     Copy-Item -LiteralPath $pluginWorkerPath -Destination $pluginStage
@@ -59,7 +69,7 @@ try {
     foreach ($pluginAsset in $pluginVcRuntime.files | Where-Object { $_.path.StartsWith('bin/') }) {
         Move-Item -LiteralPath (Join-Path $pluginStage ('runtime/' + $pluginAsset.path)) -Destination $pluginStage
     }
-    Copy-Item -LiteralPath (Join-Path $pluginRoot 'licenses') -Destination $pluginStage -Recurse
+    Copy-Item -Path (Join-Path $pluginRoot 'licenses/*') -Destination (Join-Path $pluginStage 'licenses') -Recurse -Force
     Copy-Item -LiteralPath (Join-Path $pluginRoot 'vendor/rust-background-removal/LICENSE') -Destination (Join-Path $pluginStage 'licenses/rust-background-removal-MIT.txt')
 
     # The .pcplugin is a ZIP with files directly at its root and portable slash-separated names.
